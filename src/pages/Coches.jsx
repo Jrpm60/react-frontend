@@ -30,12 +30,15 @@ const Coches = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
 
+  // llamada a EXPREs donde estan los datos Capa de NEGOCIO
   useEffect(() => {
     fetch('http://localhost:5000/api/v1/coches')
       .then((response) => response.json())
       .then((data) => setCoches(data))
       .catch((error) => console.error('Error fetching coches:', error));
   }, []);
+  // ------------------------------------------------------
+
 
   const handleVer = (id) => {
     const coche = coches.find((coche) => coche.id === id);
@@ -68,7 +71,7 @@ const Coches = () => {
       }),
     })
       .then(() => {
-        alert('Coche modificado exitosamente');
+        alert('Modificacion realizada con é');
         setCoches(
           coches.map((coche) =>
             coche.id === editedCoche.id ? { ...editedCoche } : coche
@@ -118,7 +121,6 @@ const Coches = () => {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell align="right"><h2><b>Id</b></h2>&nbsp;</TableCell>
               <TableCell align="right"><h2><b>Marca</b></h2>&nbsp;</TableCell>
               <TableCell align="right"><h2><b>Modelo</b></h2>&nbsp;</TableCell>
               <TableCell align="right"><h2><b>Año</b></h2>&nbsp;</TableCell>
@@ -131,7 +133,7 @@ const Coches = () => {
                 key={coche.id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
-                <TableCell align="right">{coche.id}</TableCell>
+                
                 <TableCell align="right">{coche.marca}</TableCell>
                 <TableCell align="right">{coche.modelo}</TableCell>
                 <TableCell align="right">{coche.año}</TableCell>
@@ -149,7 +151,7 @@ const Coches = () => {
                         startIcon={<AutoFixHighIcon />}
                       />
                       <Button
-                        onClick={() => handleDelClick(coche.id)} // Ahora llama a handleDelClick
+                        onClick={() => handleDelClick(coche.id)} 
                         variant="outlined"
                         startIcon={<DeleteIcon />}
                         color="error" // Añadí color rojo para indicar acción de eliminación
