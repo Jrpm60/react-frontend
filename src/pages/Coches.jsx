@@ -11,6 +11,7 @@ import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
+import AddIcon from '@mui/icons-material/Add';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
@@ -18,17 +19,29 @@ import DialogActions from '@mui/material/DialogActions';
 import TextField from '@mui/material/TextField';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import { Typography } from '@mui/material';
+import { blue } from '@mui/material/colors';
+import { useNavigate } from 'react-router-dom';
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 
 const Coches = () => {
   const [coches, setCoches] = useState([]);
   const [selectedCoche, setSelectedCoche] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [isNew, setIsNew] = useState(false);
   const [editedCoche, setEditedCoche] = useState(null);
+  const [newCoche, setNewCoche] = useState({ marca: '', modelo: '', año: '', color: '', puertas: '', precio: '' }); // Inicializar newCoche
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [cocheToDelete, setCocheToDelete] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
+
+  const navigate = useNavigate();
+  
+  const goToHome = () => {
+    navigate("/");
+  }
 
   // llamada a EXPREs donde estan los datos Capa de NEGOCIO
   useEffect(() => {
@@ -52,6 +65,41 @@ const Coches = () => {
     setIsEditing(true);
   };
 
+  const handleOpenNewDialog = () => {
+    setIsNew(true);
+    setNewCoche({ marca: '', modelo: '', año: '', color: '', puertas: '', precio: '' }); // Reiniciar el formulario
+  };
+
+  const handleCloseNewDialog = () => {
+    setIsNew(false);
+  };
+
+  const handleNewInputChange = (event) => {
+    const { name, value } = event.target;
+    setNewCoche({ ...newCoche, [name]: value });
+  };
+
+  const handleSaveNew = () => {
+    if (!newCoche.marca || !newCoche.modelo || !newCoche.año || !newCoche.color || !newCoche.puertas || !newCoche.precio) {
+      alert('Por favor, complete todos los campos.');
+      return;
+    }
+
+    fetch('http://localhost:5000/api/v1/coches', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newCoche),
+    })
+      .then((response) => response.json()) // Esperar la respuesta JSON del servidor
+      .then((data) => {
+        alert('Alta realizada con éxito');
+        setCoches([...coches, data]); // Añadir el nuevo coche a la lista
+        setIsNew(false);
+        setNewCoche({ marca: '', modelo: '', año: '', color: '', puertas: '', precio: '' }); // Limpiar el formulario
+      })
+      .catch((error) => console.error('Error al dar de alta el coche:', error));
+  };
+
   const handleSave = () => {
     if (!editedCoche || !editedCoche.marca || !editedCoche.modelo || !editedCoche.año || !editedCoche.color || !editedCoche.puertas || !editedCoche.precio) {
       alert('Por favor, complete todos los campos.');
@@ -71,7 +119,7 @@ const Coches = () => {
       }),
     })
       .then(() => {
-        alert('Modificacion realizada con é');
+        alert('Modificacion realizada con éxito');
         setCoches(
           coches.map((coche) =>
             coche.id === editedCoche.id ? { ...editedCoche } : coche
@@ -115,8 +163,25 @@ const Coches = () => {
 
   return (
     <div>
-      <h1>Listado de Coches</h1>
+      <Typography variant="h3" sx={{ color: 'primary.main', fontWeight: 'bold', textAlign: 'center' }}>
+        Lista de Coches
+      </Typography>
 
+      <Button 
+        onClick={handleOpenNewDialog} 
+        variant="outlined"
+        startIcon={<AddIcon />}>
+          Añadir coche
+      </Button>
+
+      <Button 
+        onClick={goToHome}
+        variant="contained" 
+        color="primary" 
+        startIcon={<HomeOutlinedIcon/>}>        
+        Home
+      </Button>
+      
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
@@ -133,7 +198,7 @@ const Coches = () => {
                 key={coche.id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
-                
+
                 <TableCell align="right">{coche.marca}</TableCell>
                 <TableCell align="right">{coche.modelo}</TableCell>
                 <TableCell align="right">{coche.año}</TableCell>
@@ -151,7 +216,7 @@ const Coches = () => {
                         startIcon={<AutoFixHighIcon />}
                       />
                       <Button
-                        onClick={() => handleDelClick(coche.id)} 
+                        onClick={() => handleDelClick(coche.id)}
                         variant="outlined"
                         startIcon={<DeleteIcon />}
                         color="error" // Añadí color rojo para indicar acción de eliminación
@@ -257,6 +322,65 @@ const Coches = () => {
           </DialogActions>
         </Dialog>
       )}
+
+      {/* Dialog para añadir */}
+      <Dialog open={isNew} onClose={handleCloseNewDialog}>
+        <DialogTitle>Nuevo Vehiculo</DialogTitle>
+        <DialogContent>
+          <TextField
+            label="Marca"
+            name="marca"
+            value={newCoche.marca}
+            onChange={handleNewInputChange}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="Modelo"
+            name="modelo"
+            value={newCoche.modelo}
+            onChange={handleNewInputChange}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="Año"
+            name="año"
+            value={newCoche.año}
+            onChange={handleNewInputChange}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="Color"
+            name="color"
+            value={newCoche.color}
+            onChange={handleNewInputChange}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="Puertas"
+            name="puertas"
+            value={newCoche.puertas}
+            onChange={handleNewInputChange}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="Precio"
+            name="precio"
+            value={newCoche.precio}
+            onChange={handleNewInputChange}
+            fullWidth
+            margin="normal"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleSaveNew}>Guardar</Button>
+          <Button onClick={handleCloseNewDialog}>Cancelar</Button>
+        </DialogActions>
+      </Dialog>
 
       {/* Dialog de confirmación para borrar */}
       <Dialog open={confirmDialogOpen} onClose={handleDelCancel}>
