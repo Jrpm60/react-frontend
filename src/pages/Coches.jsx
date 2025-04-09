@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { AppBar, Toolbar, Button, Typography } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -7,7 +8,6 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
@@ -19,10 +19,9 @@ import DialogActions from '@mui/material/DialogActions';
 import TextField from '@mui/material/TextField';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-import { Typography } from '@mui/material';
-import { blue } from '@mui/material/colors';
 import { useNavigate } from 'react-router-dom';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import CarsSummaryComponent from '../components/CarsSummaryComponent'
 
 const Coches = () => {
   const [coches, setCoches] = useState([]);
@@ -43,7 +42,7 @@ const Coches = () => {
     navigate("/");
   }
 
-  // llamada a EXPREs donde estan los datos Capa de NEGOCIO
+  // llamada a EXPRES donde estan los datos Capa de NEGOCIO
   useEffect(() => {
     fetch('http://localhost:5000/api/v1/coches')
       .then((response) => response.json())
@@ -53,14 +52,14 @@ const Coches = () => {
   // ------------------------------------------------------
 
 
-  const handleVer = (id) => {
-    const coche = coches.find((coche) => coche.id === id);
+  const handleVer = (_id) => {
+    const coche = coches.find((coche) => coche._id === _id);
     setSelectedCoche(coche);
     setOpenDialog(true);
   };
 
-  const handleModi = (id) => {
-    const coche = coches.find((coche) => coche.id === id);
+  const handleModi = (_id) => {
+    const coche = coches.find((coche) => coche._id === _id);
     setEditedCoche(coche);
     setIsEditing(true);
   };
@@ -130,12 +129,13 @@ const Coches = () => {
       .catch((error) => console.error('Error modificando el coche:', error));
   };
 
-  const handleDelClick = (id) => {
-    setCocheToDelete(id);
+  const handleDelClick = (_id) => {
+    setCocheToDelete(_id);
     setConfirmDialogOpen(true);
   };
 
   const handleDelConfirm = () => {
+    console.log(cocheToDelete)
     fetch(`http://localhost:5000/api/v1/coches/${cocheToDelete}`, {
       method: 'DELETE',
     })
@@ -163,32 +163,41 @@ const Coches = () => {
 
   return (
     <div>
-      <Typography variant="h3" sx={{ color: 'primary.main', fontWeight: 'bold', textAlign: 'center' }}>
+
+      <AppBar position="static"> {/* 'fixed' para que se quede en la parte superior al hacer scroll */}
+        <Toolbar>
+          <Typography variant="h6" sx={{ flexGrow: 1 }}> {/* flexGrow hace que el título ocupe el espacio restante */}
+            Desarrollo WEB _ Coches.jsx 
+          </Typography>
+          <Button color="inherit" onClick={goToHome}>
+            Pagina Principal
+          </Button>
+
+          <Button color="inherit" onClick={handleOpenNewDialog}>
+            Añadir Vehiculo
+          </Button>
+          
+          {/* Aquí irán los futuros botones de navegación */}
+        </Toolbar>
+      </AppBar>
+      {/* Contenido principal de la página debajo de la barra de navegación */}
+      <Typography variant="h3" sx={{ color: 'primary.main', fontWeight: 'bold', textAlign: 'center', mt: 4 }}>
         Lista de Coches
       </Typography>
+      {/* Otros elementos de la página */}
+      
+      <CarsSummaryComponent/>
 
-      <Button 
-        onClick={handleOpenNewDialog} 
-        variant="outlined"
-        startIcon={<AddIcon />}>
-          Añadir coche
-      </Button>
-
-      <Button 
-        onClick={goToHome}
-        variant="contained" 
-        color="primary" 
-        startIcon={<HomeOutlinedIcon/>}>        
-        Home
-      </Button>
       
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell align="right"><h2><b>Marca</b></h2>&nbsp;</TableCell>
-              <TableCell align="right"><h2><b>Modelo</b></h2>&nbsp;</TableCell>
-              <TableCell align="right"><h2><b>Año</b></h2>&nbsp;</TableCell>
+              <TableCell align="center"><h2><b>Id</b></h2>&nbsp;</TableCell>
+              <TableCell align="center"><h2><b>Marca</b></h2>&nbsp;</TableCell>
+              <TableCell align="center"><h2><b>Modelo</b></h2>&nbsp;</TableCell>
+              <TableCell align="center"><h2><b>Año</b></h2>&nbsp;</TableCell>
+              <TableCell align="center"><h2><b>Precio</b></h2>&nbsp;</TableCell>
               <TableCell align="right"><h2><b>Acción</b></h2>&nbsp;</TableCell>
             </TableRow>
           </TableHead>
@@ -198,28 +207,29 @@ const Coches = () => {
                 key={coche.id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
-
-                <TableCell align="right">{coche.marca}</TableCell>
-                <TableCell align="right">{coche.modelo}</TableCell>
-                <TableCell align="right">{coche.año}</TableCell>
+                <TableCell align="center">{coche._id}</TableCell>
+                <TableCell align="center">{coche.marca}</TableCell>
+                <TableCell align="center">{coche.modelo}</TableCell>
+                <TableCell align="center">{coche.año}</TableCell>
+                <TableCell align="center">{coche.precio}</TableCell>
                 <TableCell align="right">
                   <Box sx={{ '& button': { m: 0 } }}>
                     <div>
                       <Button
-                        onClick={() => handleVer(coche.id)}
+                        onClick={() => handleVer(coche._id)}
                         variant="outlined"
                         startIcon={<RemoveRedEyeIcon />}
                       />
                       <Button
-                        onClick={() => handleModi(coche.id)}
+                        onClick={() => handleModi(coche._id)}
                         variant="outlined"
                         startIcon={<AutoFixHighIcon />}
                       />
                       <Button
-                        onClick={() => handleDelClick(coche.id)}
+                        onClick={() => handleDelClick(coche._id)}
                         variant="outlined"
                         startIcon={<DeleteIcon />}
-                        color="error" // Añadí color rojo para indicar acción de eliminación
+                        color="error" 
                       />
                     </div>
                   </Box>
@@ -399,7 +409,7 @@ const Coches = () => {
         open={snackbarOpen}
         autoHideDuration={3000}
         onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
         <Alert onClose={handleSnackbarClose} severity="success" sx={{ width: '100%' }}>
           {snackbarMessage}

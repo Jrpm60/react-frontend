@@ -15,8 +15,6 @@ const MessageComponent = () => {
       });
   }, []); // Empty dependency array, so it runs once when the component mounts
 
-
-
   return (
     <div>
       <h1>Message from Express:</h1>

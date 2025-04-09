@@ -1,32 +1,39 @@
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@mui/material';
-
+import { AppBar, Toolbar, Button, Typography } from '@mui/material';
 
 function HomePage() {
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  const goToUsers = () => {
+    navigate("/users");
+  }
 
-    const goToUsers = () => {
-        navigate("/users");
-    }
-
-    const goToCoches = () => {
-      navigate("/coches");
+  const goToCoches = () => {
+    navigate("/coches");
   }
 
   return (
     <div>
-      <h2>Pagina Principal HOME</h2>
+      <AppBar position="static"> {/* 'fixed' para que se quede en la parte superior al hacer scroll */}
+        <Toolbar>
+          <Typography variant="h6" sx={{ flexGrow: 1 }}> {/* flexGrow hace que el título ocupe el espacio restante */}
+            Desarrollo WEB _ Home.jsx
+          </Typography>
+          <Button color="inherit" onClick={goToUsers}>
+            Users
+          </Button>
+          <Button color="inherit" onClick={goToCoches}>
+            Coches
+          </Button>
+          {/* Aquí irán los futuros botones de navegación */}
+        </Toolbar>
+      </AppBar>
 
-      <Button variant="contained" color="primary" onClick={goToUsers}>
-        Users
-      </Button>
-
-      <Button variant="contained" color="primary" onClick={goToCoches}>
-        Coches
-      </Button>
-
-
+      {/* Contenido principal de la página debajo de la barra de navegación */}
+      <Typography variant="h3" sx={{ color: 'primary.main', fontWeight: 'bold', textAlign: 'center', mt: 4 }}>
+        Pagina Principal
+      </Typography>
+      {/* Otros elementos de la página */}
     </div>
   );
 }
