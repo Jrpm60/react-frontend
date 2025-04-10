@@ -7,6 +7,7 @@ function HomePage() {
     { label: 'Página Principal', to: '/' },
     { label: 'Usuarios', to: '/users' },
     { label: 'Coches', to: '/coches' },
+    { label: 'Ingles', to: '/ingles' },
     
   ];
 

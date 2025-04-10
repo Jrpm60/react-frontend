@@ -4,6 +4,8 @@ import HomePage from './pages/HomePage';
 import UserListPage from './pages/UserListPage';
 import UserFormInsertPage from './pages/UserFormInsertPage';
 import Coches from './pages/Coches';
+import Ingles from './pages/Ingles';
+import ResultadosIngles from './pages/ResultadosIngles';
 
 
 function App() {
@@ -15,6 +17,8 @@ function App() {
         <Route path="/users/:id/edit" element={<UserFormInsertPage />} />  {/* No implementado */}
         <Route path="/users/new" element={<UserFormInsertPage />} />
         <Route path="/coches" element={<Coches />} />
+        <Route path="/ingles" element={<Ingles />} />
+        <Route path="/resultadosingles" element={<ResultadosIngles />} />
       </Routes>
     </BrowserRouter>
   );
