@@ -1,7 +1,6 @@
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
-
 import UserListPage from './pages/UserListPage';
 import UserFormInsertPage from './pages/UserFormInsertPage';
 import Coches from './pages/Coches';

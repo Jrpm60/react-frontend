@@ -1,14 +1,11 @@
 import React, {useState} from 'react';
-import { useNavigate } from 'react-router-dom';
-import { AppBar, Toolbar, Button, Typography, Box, TextField } from '@mui/material';
+import { Button, Typography, Box, TextField } from '@mui/material';
+import AppBarSelf from '../components/AppBarSelf';
 
 
 function UserFormInsertPage() {
   const [nombre, setNombre] = useState("");
   const [edad, setEdad] = useState("");
-
-
-  const navigate = useNavigate();
 
  const handleFormSubmit = async (e) => {
   e.preventDefault();
@@ -32,31 +29,17 @@ function UserFormInsertPage() {
   console.log("Mandar fetch")
  }
 
-  const goToHome = () => {
-    navigate("/");
-  }
-
-  const goToUsers = () => {
-  navigate("/users");
- }
+ const appBarButtonsUserForm = [
+  { label: 'Página Principal', to: '/' },
+  { label: 'Usuarios', to: '/users' },
+  
+];
 
   return (
     <div>
 
-      <AppBar position="static"> {/* 'fixed' para que se quede en la parte superior al hacer scroll */}
-        <Toolbar>
-          <Typography variant="h6" sx={{ flexGrow: 1 }}> {/* flexGrow hace que el título ocupe el espacio restante */}
-            Desarrollo WEB _ UserFormInsertPage.jsx
-          </Typography>
-          <Button color="inherit" onClick={goToHome}>
-            Pagina Principal
-          </Button>
-          <Button color="inherit" onClick={goToUsers}>
-            Usuarios
-          </Button>
-          {/* Aquí irán los futuros botones de navegación */}
-        </Toolbar>
-      </AppBar>
+      <AppBarSelf title="Mern/Reacrt/Pages/UserForm.jsx" buttons={appBarButtonsUserForm} />
+
       {/* Contenido principal de la página debajo de la barra de navegación */}
       <Typography variant="h3" sx={{ color: 'primary.main', fontWeight: 'bold', textAlign: 'center', mt: 4 }}>
         Alta Nuevo Usuario

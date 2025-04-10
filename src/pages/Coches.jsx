@@ -1,56 +1,71 @@
 import React, { useEffect, useState } from 'react';
-import { AppBar, Toolbar, Button, Typography } from '@mui/material';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
+import { Button, Typography, Paper, Box, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Snackbar, Alert } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
-import AddIcon from '@mui/icons-material/Add';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import TextField from '@mui/material/TextField';
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
-import { useNavigate } from 'react-router-dom';
-import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
-import CarsSummaryComponent from '../components/CarsSummaryComponent'
+import AppBarSelf from '../components/AppBarSelf';
 
 const Coches = () => {
   const [coches, setCoches] = useState([]);
+  const [totalCoches, setTotalCoches] = useState(null);
+  const [averagePrice, setAveragePrice] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [selectedCoche, setSelectedCoche] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isNew, setIsNew] = useState(false);
   const [editedCoche, setEditedCoche] = useState(null);
-  const [newCoche, setNewCoche] = useState({ marca: '', modelo: '', año: '', color: '', puertas: '', precio: '' }); // Inicializar newCoche
+  const [newCoche, setNewCoche] = useState({ marca: '', modelo: '', año: '', color: '', puertas: '', precio: '' });
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [cocheToDelete, setCocheToDelete] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
 
-  const navigate = useNavigate();
-  
-  const goToHome = () => {
-    navigate("/");
-  }
 
-  // llamada a EXPRES donde estan los datos Capa de NEGOCIO
+  const handleOpenNewDialog = () => {
+    setIsNew(true);
+    setNewCoche({ marca: '', modelo: '', año: '', color: '', puertas: '', precio: '' });
+  };
+
+  const appBarButtonsCoches = [
+    { label: 'Página Principal', to: '/' },
+    { label: 'Nuevo Vehículo', onClick: handleOpenNewDialog },
+    
+  ];
+
   useEffect(() => {
-    fetch('http://localhost:5000/api/v1/coches')
-      .then((response) => response.json())
-      .then((data) => setCoches(data))
-      .catch((error) => console.error('Error fetching coches:', error));
-  }, []);
-  // ------------------------------------------------------
+    const fetchCochesData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const [cochesResponse, countResponse, averageResponse] = await Promise.all([
+          fetch('http://localhost:5000/api/v1/coches'),
+          fetch('http://localhost:5000/api/v1/coches?summary=count'),
+          fetch('http://localhost:5000/api/v1/coches?summary=average')
+        ]);
 
+        if (!cochesResponse.ok || !countResponse.ok || !averageResponse.ok) {
+          throw new Error('Failed to fetch data');
+        }
+
+        const cochesData = await cochesResponse.json();
+        const countData = await countResponse.json();
+        const averageData = await averageResponse.json();
+
+        setCoches(cochesData);
+        setTotalCoches(countData.respuesta);
+        setAveragePrice(averageData.respuesta);
+
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCochesData();
+  }, []);
 
   const handleVer = (_id) => {
     const coche = coches.find((coche) => coche._id === _id);
@@ -64,10 +79,7 @@ const Coches = () => {
     setIsEditing(true);
   };
 
-  const handleOpenNewDialog = () => {
-    setIsNew(true);
-    setNewCoche({ marca: '', modelo: '', año: '', color: '', puertas: '', precio: '' }); // Reiniciar el formulario
-  };
+
 
   const handleCloseNewDialog = () => {
     setIsNew(false);
@@ -89,12 +101,12 @@ const Coches = () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newCoche),
     })
-      .then((response) => response.json()) // Esperar la respuesta JSON del servidor
+      .then((response) => response.json())
       .then((data) => {
         alert('Alta realizada con éxito');
-        setCoches([...coches, data]); // Añadir el nuevo coche a la lista
+        setCoches([...coches, data]);
         setIsNew(false);
-        setNewCoche({ marca: '', modelo: '', año: '', color: '', puertas: '', precio: '' }); // Limpiar el formulario
+        setNewCoche({ marca: '', modelo: '', año: '', color: '', puertas: '', precio: '' });
       })
       .catch((error) => console.error('Error al dar de alta el coche:', error));
   };
@@ -121,7 +133,7 @@ const Coches = () => {
         alert('Modificacion realizada con éxito');
         setCoches(
           coches.map((coche) =>
-            coche.id === editedCoche.id ? { ...editedCoche } : coche
+            coche._id === editedCoche._id ? { ...editedCoche } : coche
           )
         );
         setIsEditing(false);
@@ -135,23 +147,22 @@ const Coches = () => {
   };
 
   const handleDelConfirm = () => {
-    console.log(cocheToDelete)
     fetch(`http://localhost:5000/api/v1/coches/${cocheToDelete}`, {
       method: 'DELETE',
     })
       .then(() => {
-        setCoches(coches.filter((coche) => coche.id !== cocheToDelete));
+        setCoches(coches.filter((coche) => coche._id !== cocheToDelete));
         setConfirmDialogOpen(false);
         setSnackbarMessage(`El coche con id ${cocheToDelete} ha sido eliminado`);
         setSnackbarOpen(true);
-        setCocheToDelete(null); // Limpiar el ID del coche a eliminar
+        setCocheToDelete(null);
       })
       .catch((error) => console.error('Error eliminando el coche:', error));
   };
 
   const handleDelCancel = () => {
     setConfirmDialogOpen(false);
-    setCocheToDelete(null); // Limpiar el ID del coche a eliminar
+    setCocheToDelete(null);
   };
 
   const handleSnackbarClose = (event, reason) => {
@@ -164,31 +175,30 @@ const Coches = () => {
   return (
     <div>
 
-      <AppBar position="static"> {/* 'fixed' para que se quede en la parte superior al hacer scroll */}
-        <Toolbar>
-          <Typography variant="h6" sx={{ flexGrow: 1 }}> {/* flexGrow hace que el título ocupe el espacio restante */}
-            Desarrollo WEB _ Coches.jsx 
-          </Typography>
-          <Button color="inherit" onClick={goToHome}>
-            Pagina Principal
-          </Button>
+      <AppBarSelf title="Mern/Reacrt/Pages/Coches.jsx" buttons={appBarButtonsCoches} />
 
-          <Button color="inherit" onClick={handleOpenNewDialog}>
-            Añadir Vehiculo
-          </Button>
-          
-          {/* Aquí irán los futuros botones de navegación */}
-        </Toolbar>
-      </AppBar>
-      {/* Contenido principal de la página debajo de la barra de navegación */}
       <Typography variant="h3" sx={{ color: 'primary.main', fontWeight: 'bold', textAlign: 'center', mt: 4 }}>
         Lista de Coches
       </Typography>
-      {/* Otros elementos de la página */}
-      
-      <CarsSummaryComponent/>
 
-      
+      {loading && <Typography textAlign="center" mt={2}>Cargando datos...</Typography>}
+      {error && <Typography color="error" textAlign="center" mt={2}>Error: {error}</Typography>}
+
+      {!loading && !error && (
+        <Box mb={2} display="flex" gap={2} justifyContent="center">
+          <Paper elevation={2} sx={{ p: 2 }}>
+            <Typography variant="subtitle1">
+              <b>Total de coches:</b> {totalCoches}
+            </Typography>
+          </Paper>
+          <Paper elevation={2} sx={{ p: 2 }}>
+            <Typography variant="subtitle1">
+              <b>Precio promedio:</b> {averagePrice && `${averagePrice.toFixed(2)} €`}
+            </Typography>
+          </Paper>
+        </Box>
+      )}
+
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
@@ -198,13 +208,14 @@ const Coches = () => {
               <TableCell align="center"><h2><b>Modelo</b></h2>&nbsp;</TableCell>
               <TableCell align="center"><h2><b>Año</b></h2>&nbsp;</TableCell>
               <TableCell align="center"><h2><b>Precio</b></h2>&nbsp;</TableCell>
+              <TableCell align="center"><h2><b>Imagen</b></h2>&nbsp;</TableCell>
               <TableCell align="right"><h2><b>Acción</b></h2>&nbsp;</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {coches.map((coche) => (
               <TableRow
-                key={coche.id}
+                key={coche._id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
                 <TableCell align="center">{coche._id}</TableCell>
@@ -212,26 +223,12 @@ const Coches = () => {
                 <TableCell align="center">{coche.modelo}</TableCell>
                 <TableCell align="center">{coche.año}</TableCell>
                 <TableCell align="center">{coche.precio}</TableCell>
+                <TableCell align="center">{coche.imagen}</TableCell>
                 <TableCell align="right">
-                  <Box sx={{ '& button': { m: 0 } }}>
-                    <div>
-                      <Button
-                        onClick={() => handleVer(coche._id)}
-                        variant="outlined"
-                        startIcon={<RemoveRedEyeIcon />}
-                      />
-                      <Button
-                        onClick={() => handleModi(coche._id)}
-                        variant="outlined"
-                        startIcon={<AutoFixHighIcon />}
-                      />
-                      <Button
-                        onClick={() => handleDelClick(coche._id)}
-                        variant="outlined"
-                        startIcon={<DeleteIcon />}
-                        color="error" 
-                      />
-                    </div>
+                  <Box sx={{ '& button': { m: 0.5 } }}>
+                    <Button onClick={() => handleVer(coche._id)} variant="outlined" startIcon={<RemoveRedEyeIcon />} size="small" />
+                    <Button onClick={() => handleModi(coche._id)} variant="outlined" startIcon={<AutoFixHighIcon />} size="small" />
+                    <Button onClick={() => handleDelClick(coche._id)} variant="outlined" startIcon={<DeleteIcon />} color="error" size="small" />
                   </Box>
                 </TableCell>
               </TableRow>
@@ -252,7 +249,6 @@ const Coches = () => {
               <p><b>Color:</b> {selectedCoche.color}</p>
               <p><b>Puertas:</b> {selectedCoche.puertas}</p>
               <p><b>Precio:</b> {selectedCoche.precio}</p>
-              {/* Añadimos la imagen aquí */}
               {selectedCoche.imagen && (
                 <Box mt={2}>
                   <img src={selectedCoche.imagen} alt={`Imagen de ${selectedCoche.marca} ${selectedCoche.modelo}`} style={{ maxWidth: '100%', height: 'auto' }} />
@@ -325,6 +321,15 @@ const Coches = () => {
               fullWidth
               margin="normal"
             />
+              <TextField
+              label="Imagen"
+              value={editedCoche?.imagen || ''}
+              onChange={(e) =>
+                setEditedCoche({ ...editedCoche, imagen: e.target.value })
+              }
+              fullWidth
+              margin="normal"
+            />
           </DialogContent>
           <DialogActions>
             <Button onClick={handleSave}>Guardar</Button>
@@ -381,6 +386,14 @@ const Coches = () => {
             label="Precio"
             name="precio"
             value={newCoche.precio}
+            onChange={handleNewInputChange}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="imagen"
+            name="imagen"
+            value={newCoche.imagen}
             onChange={handleNewInputChange}
             fullWidth
             margin="normal"
