@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { TextField, Button, Modal, Box, Typography } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
@@ -12,26 +11,6 @@ import Paper from '@mui/material/Paper';
 import { GoogleGenAI } from "@google/genai";
 import AutoAwesomeTwoToneIcon from '@mui/icons-material/AutoAwesomeTwoTone';
 import { format } from 'date-fns';
-
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-}));
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
-    backgroundColor: theme.palette.action.hover,
-  },
-  // hide last border
-  '&:last-child td, &:last-child th': {
-    border: 0,
-  },
-}));
 
 
 const ResultadosIngles = () => {
@@ -123,10 +102,10 @@ const ResultadosIngles = () => {
           <TableHead>
             <TableRow>
               {/* <TableCell align="center"><h2><b>Tipo</b></h2></TableCell> */}
-              <StyledTableCell align="center"><h2><b>User's e-mail</b></h2></StyledTableCell>
-              <StyledTableCell align="center"><h2><b>Description</b></h2></StyledTableCell>
-              <StyledTableCell align="center"><h2><b>Answer's Date/Time</b></h2></StyledTableCell>
-              <StyledTableCell align="center"><h2><b>Teacher's Comment</b></h2></StyledTableCell>
+              <TableCell align="center"><h2><b>User's e-mail</b></h2></TableCell>
+              <TableCell align="center"><h2><b>Description</b></h2></TableCell>
+              <TableCell align="center"><h2><b>Date/Time</b></h2></TableCell>
+              <TableCell align="center"><h2><b>Teacher's Comment</b></h2></TableCell>
               
             </TableRow>
           </TableHead>

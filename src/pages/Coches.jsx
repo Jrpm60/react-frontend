@@ -4,6 +4,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import AppBarSelf from '../components/AppBarSelf';
+import MenuItem from '@mui/material/MenuItem';
 
 const Coches = () => {
   const [coches, setCoches] = useState([]);
@@ -21,6 +22,8 @@ const Coches = () => {
   const [cocheToDelete, setCocheToDelete] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [precioMaximo, setPrecioMaximo] = useState(0);
+  const [precioMinimo, setPrecioMinimo] = useState(0);
 
 
   const handleOpenNewDialog = () => {
@@ -79,6 +82,7 @@ const Coches = () => {
     setIsEditing(true);
   };
 
+  const preciosFilter = [ {value: "15000"}, {value: '20000'}, {value: '25000'}, {value: '30000'}, {value: 35000}, {value: 40000}]
 
 
   const handleCloseNewDialog = () => {
@@ -172,6 +176,8 @@ const Coches = () => {
     setSnackbarOpen(false);
   };
 
+
+
   return (
     <div>
 
@@ -196,8 +202,24 @@ const Coches = () => {
               <b>Precio promedio:</b> {averagePrice && `${averagePrice.toFixed(2)} €`}
             </Typography>
           </Paper>
+
+        <TextField
+          id="precioMin"
+          label="Precio Minimo"
+          variant="outlined"
+          value={precioMinimo}
+          //onChange={handleChangePrecioMinimo}
+      />
+
+          <TextField
+            id="precioMax"
+            label="Precio Maximo"
+            variant="outlined"            
+          />
+
+
         </Box>
-      )}
+      )}        
 
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
