@@ -6,6 +6,7 @@ import UserFormInsertPage from './pages/UserFormInsertPage';
 import Coches from './pages/Coches';
 import Ingles from './pages/Ingles';
 import ResultadosIngles from './pages/ResultadosIngles';
+import Motivaciones from './pages/Motivaciones';
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
         <Route path="/coches" element={<Coches />} />
         <Route path="/ingles" element={<Ingles />} />
         <Route path="/resultadosingles" element={<ResultadosIngles />} />
+        <Route path="/motivaciones" element={<Motivaciones />} />
       </Routes>
     </BrowserRouter>
   );

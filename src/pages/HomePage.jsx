@@ -8,6 +8,7 @@ function HomePage() {
     { label: 'Usuarios', to: '/users' },
     { label: 'Coches', to: '/coches' },
     { label: 'Ingles', to: '/ingles' },
+    { label: 'Motivaciones', to: '/motivaciones' },
     
   ];
 
