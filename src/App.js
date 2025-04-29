@@ -6,7 +6,10 @@ import UserFormInsertPage from './pages/UserFormInsertPage';
 import Coches from './pages/Coches';
 import Ingles from './pages/Ingles';
 import ResultadosIngles from './pages/ResultadosIngles';
-import Motivaciones from './pages/Motivaciones';
+/* import Motivaciones from './pages/Motivaciones'; */
+import ShoppingCartComponent from './components/ShoppingCartComponent';
+import ShoppingCartComponent2 from './components/ShoppingCartComponent2';
+import Faq from './pages/Faq';
 
 
 function App() {
@@ -20,7 +23,10 @@ function App() {
         <Route path="/coches" element={<Coches />} />
         <Route path="/ingles" element={<Ingles />} />
         <Route path="/resultadosingles" element={<ResultadosIngles />} />
-        <Route path="/motivaciones" element={<Motivaciones />} />
+        {/* <Route path="/motivaciones" element={<Motivaciones />} /> */}
+        <Route path="/shoppingcartcomponent" element={<ShoppingCartComponent />} />
+        <Route path="/shoppingcartcomponent2" element={<ShoppingCartComponent2 />} />
+        <Route path="/faq" element={<Faq />} />
       </Routes>
     </BrowserRouter>
   );

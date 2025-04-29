@@ -1,5 +1,6 @@
 import { Typography } from '@mui/material';
 import AppBarSelf from '../components/AppBarSelf';
+import { useTranslation } from 'react-i18next';
 
 function HomePage() {
 
@@ -8,9 +9,19 @@ function HomePage() {
     { label: 'Usuarios', to: '/users' },
     { label: 'Coches', to: '/coches' },
     { label: 'Ingles', to: '/ingles' },
-    { label: 'Motivaciones', to: '/motivaciones' },
+/*     { label: 'Motivaciones', to: '/motivaciones' }, */
+    { label: 'SCC', to: '/shoppingcartcomponent' },
+    { label: 'SCC_HOOK', to: '/shoppingcartcomponent2' },
+    { label: 'FAQ', to: '/faq' },
     
   ];
+
+  const { t, i18n } = useTranslation();
+
+  const changeLanguage = (lang) => {
+    i18n.changeLanguage(lang);
+  };
+
 
   return (
     <div>
@@ -19,8 +30,14 @@ function HomePage() {
 
 
       {/* Contenido principal de la página debajo de la barra de navegación */}
+
+      <h1>{t('welcome_message')}</h1>
+      
+      <button onClick={() => changeLanguage('en')}>English</button>
+      <button onClick={() => changeLanguage('es')}>Español</button>
+
       <Typography variant="h3" sx={{ color: 'primary.main', fontWeight: 'bold', textAlign: 'center', mt: 4 }}>
-        Pagina Principal
+        {t("Pagina Principal")}
       </Typography>
 
 
