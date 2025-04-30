@@ -12,6 +12,7 @@ function HomePage() {
 /*     { label: 'Motivaciones', to: '/motivaciones' }, */
     { label: 'SCC', to: '/shoppingcartcomponent' },
     { label: 'SCC_HOOK', to: '/shoppingcartcomponent2' },
+    { label: 'Acceso', to: '/login' },
     { label: 'FAQ', to: '/faq' },
     
   ];
@@ -33,8 +34,6 @@ function HomePage() {
 
       <h1>{t('welcome_message')}</h1>
       
-      <button onClick={() => changeLanguage('en')}>English</button>
-      <button onClick={() => changeLanguage('es')}>Español</button>
 
       <Typography variant="h3" sx={{ color: 'primary.main', fontWeight: 'bold', textAlign: 'center', mt: 4 }}>
         {t("Pagina Principal")}

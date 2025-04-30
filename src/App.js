@@ -10,7 +10,7 @@ import ResultadosIngles from './pages/ResultadosIngles';
 import ShoppingCartComponent from './components/ShoppingCartComponent';
 import ShoppingCartComponent2 from './components/ShoppingCartComponent2';
 import Faq from './pages/Faq';
-
+import Login from './pages/Login';
 
 function App() {
   return (
@@ -27,6 +27,7 @@ function App() {
         <Route path="/shoppingcartcomponent" element={<ShoppingCartComponent />} />
         <Route path="/shoppingcartcomponent2" element={<ShoppingCartComponent2 />} />
         <Route path="/faq" element={<Faq />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </BrowserRouter>
   );
