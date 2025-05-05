@@ -9,8 +9,7 @@ function FaqPage() {
 
   const appBarButtonsHome = [    
     { label: 'Página Principal', to: '/' },
-
-   
+  
   ];
 
   return (

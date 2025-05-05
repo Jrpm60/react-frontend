@@ -1,0 +1,79 @@
+.container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #cce4f7;
+  }
+  
+  .cat {
+    position: absolute;
+    width: 80px;
+    animation-name: bounce;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    border-radius: 100%;
+  }
+  
+  @keyframes bounce {
+    0%, 100% {
+      bottom: 0;
+    }
+    50% {
+      bottom: 500px;
+    }
+  }
+  
+  .add-button {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #e75480;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .media-button {
+    position:fixed;
+    bottom: 20px;
+    left: 60%;
+    transform: translateX(-50%);
+    background-color: #6a3aa8;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .change-button {
+    position:fixed;
+    bottom: 20px;
+    left: 40%;
+    transform: translateX(-50%);
+    background-color: #73d188;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .add-button:hover {
+    background-color: #d03d6b;
+  }
+
+  .media-button:hover {
+    background-color: #a294d8;
+  }
+
+  .change-button:hover {
+    background-color: #a9f1b5;
+  }

@@ -13,6 +13,8 @@ function HomePage() {
     { label: 'SCC', to: '/shoppingcartcomponent' },
     { label: 'SCC_HOOK', to: '/shoppingcartcomponent2' },
     { label: 'Acceso', to: '/login' },
+    { label: 'Cats', to: '/catbouncepage' },
+    { label: 'ValoraMVC', to: '/valoramvc' },
     { label: 'FAQ', to: '/faq' },
     
   ];

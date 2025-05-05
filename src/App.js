@@ -11,6 +11,8 @@ import ShoppingCartComponent from './components/ShoppingCartComponent';
 import ShoppingCartComponent2 from './components/ShoppingCartComponent2';
 import Faq from './pages/Faq';
 import Login from './pages/Login';
+import CatBouncePage from './pages/CatBouncePage';  
+import ValoraMVC from './pages/ValoraMVC';
 
 function App() {
   return (
@@ -28,6 +30,8 @@ function App() {
         <Route path="/shoppingcartcomponent2" element={<ShoppingCartComponent2 />} />
         <Route path="/faq" element={<Faq />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/catbouncepage" element={<CatBouncePage />} />
+        <Route path="/valoramvc" element={<ValoraMVC />} />
       </Routes>
     </BrowserRouter>
   );
