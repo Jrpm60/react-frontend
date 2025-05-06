@@ -13,6 +13,9 @@ import Faq from './pages/Faq';
 import Login from './pages/Login';
 import CatBouncePage from './pages/CatBouncePage';  
 import ValoraMVC from './pages/ValoraMVC';
+import PropDrillingHomePage from './pages/PropDrillingHonePage';
+import PropDrillingNavDas from './pages/PropDrillingNavDas';
+
 
 function App() {
   return (
@@ -32,6 +35,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/catbouncepage" element={<CatBouncePage />} />
         <Route path="/valoramvc" element={<ValoraMVC />} />
+        <Route path="/propdrilling" element={<PropDrillingHomePage />} />
+        <Route path="/dashboard" element={<PropDrillingNavDas />} />
       </Routes>
     </BrowserRouter>
   );
