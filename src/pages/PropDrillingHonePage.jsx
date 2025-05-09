@@ -1,5 +1,7 @@
 
 import {createContext, useContext} from 'react';
+import PasswordForm from '../components/PasswordForm';
+import Emoji from '../components/emoji';
 
 const MessageContext = createContext();
 
@@ -40,12 +42,23 @@ const ChildComponent = () => {
     
       const message = "Hello everyone!";
       const edad = 50;
+
+   
+      // console.log(response)
       
       return (
         <MessageContext.Provider value={{message, edad}} >
 
           <div>  
-          <ParentComponent />
+          =================  DRILLNG ========================================
+          <ParentComponent /> <p/>
+          ===================  HOOK  =========================================
+          <PasswordForm /> <p/>
+          =========   PYTHON/FLASK EN DOCKER // UTILIZADO EN REACT  ==========
+          <Emoji/>
+
+
+
           </div>
 
         </MessageContext.Provider>

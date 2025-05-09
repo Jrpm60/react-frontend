@@ -15,6 +15,7 @@ function HomePage() {
     { label: 'Acceso', to: '/login' },
     { label: 'Cats', to: '/catbouncepage' },
     { label: 'ValoraMVC', to: '/valoramvc' },
+    { label: 'Drilling', to: '/propdrilling' },
     { label: 'FAQ', to: '/faq' },
     
   ];
